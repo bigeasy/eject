@@ -1,6 +1,6 @@
 {
     "name":                 "eject",
-    "version":              "0.0.1",
+    "version":              "0.0.2",
     "description":          "Throw an error if there is an error.",
     "author":               "Alan Gutierrez <alan@prettyrobots.com>",
     "homepage":             "https://bigeasy.github.io/eject",
