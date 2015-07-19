@@ -1,0 +1,30 @@
+{
+    "name":                 "eject",
+    "version":              "9.9.9",
+    "description":          "Throw an error if there is an error.",
+    "author":               "Alan Gutierrez <alan@prettyrobots.com>",
+    "homepage":             "https://bigeasy.github.io/eject",
+    "bugs":                 "https://github.com/bigeasy/eject/issues",
+    "keywords":
+    [
+                            "errors", "callbacks"
+    ],
+    "contributors":
+    [
+    ],
+    "main":                 "eject.js",
+    "devDependencies":
+    {
+                            "proof": "0.0.52"
+    },
+    "scripts":
+    {
+                            "test": "proof platform win32 && proof test */*/*.t.* || t/test"
+    },
+    "license":              "MIT",
+    "repository":
+    {
+                            "type": "git",
+                            "url": "http://github.com/bigeasy/eject.git"
+    }
+}
