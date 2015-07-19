@@ -1,5 +1,13 @@
 require('proof')(1, prove)
 
 function prove (assert) {
-    assert(require('../..'), 'require')
+    var eject = require('../..')
+
+    eject()
+
+    try {
+        eject(new Error('ejected'))
+    } catch (error) {
+        assert(error.message, 'ejected', 'thrown')
+    }
 }
