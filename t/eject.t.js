@@ -1,7 +1,7 @@
 require('proof')(1, prove)
 
 function prove (assert) {
-    var eject = require('../..')
+    var eject = require('..')
 
     eject()
 
