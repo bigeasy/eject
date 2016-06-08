@@ -9,12 +9,6 @@ node_js:
 branches:
   only:
     - master
-    - development
-    - travis-ci
-
-# Not using `npm install --dev` because it is recursive. It will pull in the all
-# development dependencies for CoffeeScript. Way too much spew in the Travis CI
-# build output.
 
 before_install:
   - npm install
