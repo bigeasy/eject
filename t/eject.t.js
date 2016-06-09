@@ -1,11 +1,7 @@
-require('proof')(4, prove)
+require('proof')(5, prove)
 
 function prove (assert) {
     var ejectable = require('..')
-
-    function echo (value, callback) {
-        callback(null, value)
-    }
 
     var f = ejectable(function (async, value) {
         assert(value, 1, 'parameters')
@@ -25,6 +21,8 @@ function prove (assert) {
             assert(error.message, 'ejected', 'eject outstanding')
         }])
     })
+
+    assert(f.length, 2, 'arity')
 
     f(1, function (error) {
         if (error) throw error
