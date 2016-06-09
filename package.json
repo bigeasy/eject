@@ -17,6 +17,7 @@
     },
     "dependencies":
     {
+                            "adhere":       "1.x",
                             "cadence":      "1.x",
                             "interrupt":    "1.x"
     },

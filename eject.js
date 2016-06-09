@@ -1,4 +1,5 @@
 var slice = [].slice
+var adhere = require('adhere')
 var cadence = require('cadence')
 var interrupt = require('interrupt').createInterrupter('bigeasy.eject')
 
@@ -13,7 +14,7 @@ function ejectable (body) {
             })
         }
     }
-    return cadence(function (async) {
+    var f = cadence(function (async) {
         function _async () {
             if (ejecting[ejecting.length - 1]) {
                 ejecting.push(false)
@@ -40,6 +41,9 @@ function ejectable (body) {
         _async.eject = eject
         _async.async = async
         body.apply(this, [ _async ].concat(slice.call(arguments, 1)))
+    })
+    return adhere(body, function (object, vargs) {
+        f.apply(object, vargs)
     })
 }
 
