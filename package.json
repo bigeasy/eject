@@ -1,7 +1,7 @@
 {
     "name":                 "eject",
     "version":              "0.0.2",
-    "description":          "Throw an error if there is an error.",
+    "description":          "A Cadence implementation with interruptable callbacks.",
     "keywords":
     [
                             "errors", "callbacks"

@@ -1,17 +1,1 @@
-Eject
-
-Throw an error if there is an error.
-
-    Discussion:     http://bigeasy.github.io/eject/issues/1
-
-    Documentation:  http://bigeasy.github.io/eject
-    Source:         http://github.io/bigeasy/eject
-    Issues:         http://github.com/bigeasy/eject/issues
-
-    Install:        `npm install eject`
-
-    License:        MIT
-
-To learn everything you want to know about Eject start here:
-
-    http://bigeasy.github.io/eject
+A Cadence implementation with interruptable callbacks.
