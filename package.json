@@ -1,10 +1,13 @@
 {
     "name":                 "eject",
     "version":              "0.0.4",
-    "description":          "A Cadence implementation with interruptable callbacks.",
+    "description":
+
+      "Eject errors from a Turnstie work queue before they initiate a shutdown.",
+
     "keywords":
     [
-                            "errors", "callbacks"
+                            "errors", "queue", "async", "await"
     ],
     "author":               "Alan Gutierrez <alan@prettyrobots.com>",
     "homepage":             "https://github.com/bigeasy/eject",
@@ -13,21 +16,20 @@
     "repository":
     {
                             "type": "git",
-                            "url": "http://github.com/bigeasy/eject.git"
+                            "url": "bigeasy/eject"
     },
     "dependencies":
     {
-                            "adhere":       "1.x",
-                            "cadence":      "1.x",
-                            "interrupt":    "1.x"
     },
     "devDependencies":
     {
-                            "proof":        "1.x"
+                            "destructible":                 "7.0.0-alpha.27",
+                            "proof":                        "^9.0.2",
+                            "turnstile":                    "6.0.0-alpha.42"
     },
     "main":                 "eject",
     "scripts":
     {
-                            "test": "proof platform win32 && proof test */*/*.t.* || t/test"
+                            "test": "proof test/*.t.*"
     }
 }

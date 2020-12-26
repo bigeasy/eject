@@ -1,50 +1,43 @@
-var slice = [].slice
-var adhere = require('adhere')
-var cadence = require('cadence')
-var interrupt = require('interrupt').createInterrupter('bigeasy.eject')
+const Turnstile = require('turnstile')
 
-function ejectable (body) {
-    var outstanding = [], ejecting = [ false ]
-    function eject () {
-        ejecting[ejecting.length - 1] = true
-        if (outstanding.length) {
-            ejecting.push(false)
-            outstanding.forEach(function (callback) {
-                callback(interrupt(new Error('ejected')))
-            })
-        }
+const events = require('events')
+
+class Eject extends events.EventEmitter {
+    constructor (turnstile) {
+        super()
+        this._turnstile = turnstile
     }
-    var f = cadence(function (async) {
-        function _async () {
-            if (ejecting[ejecting.length - 1]) {
-                ejecting.push(false)
-                throw interrupt(new Error('ejected'))
+
+    get health () {
+        return this._turnstile.health
+    }
+
+    get size () {
+        return this._turnstile.size
+    }
+
+    unqueue (entry) {
+        return this._turnstile.unqueue(entry)
+    }
+
+    drain () {
+        return this._turnstile.drain()
+    }
+
+    enter (...vargs) {
+        let index = 0
+        const entry = Turnstile.options(vargs)
+        const { object, worker } = entry
+        entry.object = null
+        entry.worker = async work => {
+            try {
+                await worker.call(object, work)
+            } catch (error) {
+                this.emit('error', error)
             }
-            var vargs = slice.call(arguments), index = ejecting.length - 1
-            if (vargs.length == 0) {
-                var callback = async()
-                outstanding.push(callback)
-                return function () {
-                    if (!ejecting[index]) {
-                        outstanding = outstanding.filter(function (oustanding) {
-                            return callback !== outstanding
-                        })
-                        callback.apply(null, slice.call(arguments))
-                    }
-                }
-            }
-            return async.apply(null, vargs)
         }
-        for (var key in async) {
-            _async[key] = async[key]
-        }
-        _async.eject = eject
-        _async.async = async
-        body.apply(this, [ _async ].concat(slice.call(arguments, 1)))
-    })
-    return adhere(body, function (object, vargs) {
-        f.apply(object, vargs)
-    })
+        return this._turnstile.enter.apply(this._turnstile, Turnstile.vargs(entry))
+    }
 }
 
-module.exports = ejectable
+module.exports = Eject
