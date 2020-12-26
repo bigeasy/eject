@@ -1,6 +1,6 @@
 {
     "name":                 "eject",
-    "version":              "0.0.4",
+    "version":              "0.1.0",
     "description":
 
       "Eject errors from a Turnstie work queue before they initiate a shutdown.",
