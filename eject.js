@@ -1,43 +1,71 @@
-const Turnstile = require('turnstile')
+const assert = require('assert')
 
-const events = require('events')
-
-class Eject extends events.EventEmitter {
-    constructor (turnstile) {
-        super()
-        this._turnstile = turnstile
-    }
-
-    get health () {
-        return this._turnstile.health
-    }
-
-    get size () {
-        return this._turnstile.size
-    }
-
-    unqueue (entry) {
-        return this._turnstile.unqueue(entry)
-    }
-
-    drain () {
-        return this._turnstile.drain()
-    }
-
-    enter (...vargs) {
-        let index = 0
-        const entry = Turnstile.options(vargs)
-        const { object, worker } = entry
-        entry.object = null
-        entry.worker = async work => {
-            try {
-                await worker.call(object, work)
-            } catch (error) {
-                this.emit('error', error)
+class Once {
+    constructor (ee, events, errored, named, argc) {
+        this._resolved = false
+        this._listeners = []
+        this.promise = new Promise((resolve, reject) => {
+            const resolver = name => {
+                const listener = {
+                    name: name,
+                    f: function (...vargs) {
+                        unlisten()
+                        if (named) {
+                            vargs.unshift(name)
+                        }
+                        resolve(vargs)
+                    }
+                }
+                this._listeners.push(listener)
+                return listener.f
             }
+            this._rejector = error => {
+                unlisten()
+                if (argc == 3) {
+                    resolve(errored)
+                } else {
+                    reject(error)
+                }
+            }
+            const unlisten = () => {
+                const listeners = this._listeners.splice(0)
+                listeners.forEach(listener => ee.removeListener(listener.name, listener.f))
+                ee.removeListener('error', this._rejector)
+            }
+            events.forEach(e => ee.on(e, resolver(e)))
+            ee.on('error', this._rejector)
+            this._resolve = resolve
+            this._reject = reject
+        })
+    }
+
+    resolve (name, ...vargs) {
+        assert.equal(typeof name, 'string', 'resolve requires an event name')
+        if (this._listeners.length != 0) {
+            for (const listener of this._listeners) {
+                if (listener.name == name) {
+                    listener.f.apply(null, vargs)
+                    break
+                }
+            }
+            assert.equal(this._listeners.length, 0, `no listener for ${name}`)
         }
-        return this._turnstile.enter.apply(this._turnstile, Turnstile.vargs(entry))
+    }
+
+    reject (...vargs) {
+        if (this._listeners.length != 0) {
+            this._rejector.apply(null, vargs)
+        }
     }
 }
 
-module.exports = Eject
+module.exports = function (ee, events, errored) {
+    return new Once(ee, Array.isArray(events) ? events : [ events ], errored, Array.isArray(events), arguments.length)
+}
+
+module.exports.NULL = {
+    resolve: (name) => {
+        assert.equal(typeof name, 'string', 'resolve requires an event name')
+    },
+    reject: () => {}
+}

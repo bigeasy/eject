@@ -3,7 +3,7 @@
     "version":              "0.1.0",
     "description":
 
-      "Eject errors from a Turnstie work queue before they initiate a shutdown.",
+      "Convert a single set of events on an EventEmitter into a Promise.",
 
     "keywords":
     [
@@ -23,9 +23,7 @@
     },
     "devDependencies":
     {
-                            "destructible":                 "7.0.0-alpha.27",
-                            "proof":                        "^9.0.2",
-                            "turnstile":                    "6.0.0-alpha.42"
+                            "proof":                        "^9.0.2"
     },
     "main":                 "eject",
     "scripts":
