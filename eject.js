@@ -48,6 +48,5 @@ module.exports = function (ee, events) {
 }
 
 module.exports.NULL = {
-    resolve: () => {},
-    reject: () => {}
+    once: () => {}
 }

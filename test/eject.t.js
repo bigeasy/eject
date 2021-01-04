@@ -55,7 +55,6 @@ require('proof')(6, async (okay) => {
         p.emit('error', new Error('thrown'))
     }
     {
-        once.NULL.resolve('event')
-        once.NULL.reject()
+        once.NULL.once('event')
     }
 })
