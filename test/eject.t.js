@@ -29,23 +29,30 @@ require('proof')(6, async (okay) => {
     }
     {
         const ee = new events.EventEmitter
-        const p = once(ee, 'event', null)
+        const p = once(ee, 'error')
         ee.emit('error', new Error('error'))
-        okay(await p.promise, null, 'convert rejection')
+        const [ error ] = await p.promise
+        okay(error.message, 'error', 'handle error')
     }
     {
         const ee = new events.EventEmitter
-        const p = once(ee, [ 'skip', 'event' ], null)
-        p.resolve('event', 1)
+        const p = once(ee, [ 'skip', 'event' ])
+        p.emit('event', 1)
         okay(await p.promise, [ 'event', 1 ], 'cancel with resolve')
-        p.resolve('event', 1)
+        p.emit('event', 1)
     }
     {
         const ee = new events.EventEmitter
-        const p = once(ee, 'event', null)
-        p.reject(new Error('thrown'))
-        okay(await p.promise, null, 'cancel with rejection')
-        p.reject(new Error('thrown'))
+        const p = once(ee, 'event')
+        p.emit('error', new Error('thrown'))
+        const errors = []
+        try {
+            await p.promise
+        } catch (error) {
+            errors.push(error.message)
+        }
+        okay(errors, [ 'thrown' ], 'cancel with error')
+        p.emit('error', new Error('thrown'))
     }
     {
         once.NULL.resolve('event')
