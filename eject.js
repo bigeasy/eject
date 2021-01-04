@@ -48,5 +48,5 @@ module.exports = function (ee, events) {
 }
 
 module.exports.NULL = {
-    once: () => {}
+    emit: () => {}
 }
