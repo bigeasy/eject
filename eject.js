@@ -39,7 +39,7 @@ class Once {
     }
 }
 
-module.exports = function (ee, events) {
+exports.once = function (ee, events) {
     return new Once({
         ee: ee,
         events: Array.isArray(events) ? events : [ events ],
@@ -47,6 +47,6 @@ module.exports = function (ee, events) {
     })
 }
 
-module.exports.NULL = {
+exports.once.NULL = {
     emit: () => {}
 }

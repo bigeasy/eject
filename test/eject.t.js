@@ -1,5 +1,5 @@
 require('proof')(6, async (okay) => {
-    const once = require('..')
+    const { once } = require('..')
     const events = require('events')
     {
         const ee = new events.EventEmitter
