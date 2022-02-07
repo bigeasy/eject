@@ -1,6 +1,6 @@
 {
     "name":                 "eject",
-    "version":              "0.3.1",
+    "version":              "0.3.2",
     "description":
 
       "Convert a single set of events on an EventEmitter into a Promise.",
